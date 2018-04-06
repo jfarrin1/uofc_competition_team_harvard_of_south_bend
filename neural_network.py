@@ -17,22 +17,17 @@ stock_df = ticker_df.join(factor_df, how='left')
 
 stock_df.sort_values(['ticker', 'index'], inplace=True)
 stock_df = stock_df.as_matrix()
-print(stock_df[0:10][4])
-print("============================")
 
-# -- I want ticker to be just the returns for all tickers timestamp 1 and on (ordered by ticker then timestamp -- 
-ticker = stock_df[1][:][4]
-
-# -- I want features to be the factors_df for timestamp 1 and on, but repeated 1000 times, 1 for each stock (so timetamp 1-2520 then again 1-2520 a 1000 times)
-features = stock_df[:][:]
+ticker = stock_df[:,4]
+features = stock_df[:,6:]
 
 #ticker = np.genfromtxt('stock_data/ticker_data.csv', delimiter=",")
 #features_raw = np.genfromtxt('stock_data/factor_data.csv', delimiter=",")
 #ticker = ticker_df.as_matrix()
 #ticker = ticker[ticker[:,5].argsort()]
-print(ticker)
+print(ticker[2520:2560])
 print('=========')
-print(features[:10][:])
+print(features[2520:2560][:])
 #features = np.empty(0, dtype=float)
 #for ix in range(1000):
 #	features = np.append(features,features_raw[2:][:])
@@ -40,10 +35,10 @@ print(features[:10][:])
 #		features.insert(features[i][:],i)
 print(len(features))
 print(len(ticker))
-features_train = features[0:1512000,:10]
-ticker_train = ticker[0:1512000,4]
-features_test = features[1512000:2520000,:10]
-ticker_test = ticker[1512000:2520000, 4]
+features_train = features[0:1512000]
+ticker_train = ticker[0:1512000]
+features_test = features[1512000:]
+ticker_test = ticker[1512000:]
 nn = MLPRegressor(hidden_layer_sizes=(100,),  activation='relu', solver='adam', alpha=0.001, batch_size='auto', learning_rate='constant', learning_rate_init=0.01, power_t=0.5, max_iter=1000, shuffle=True, random_state=0, tol=0.0001, verbose=False, warm_start=False, momentum=0.9, nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9, beta_2=0.999, epsilon=1e-08) 
 
 n = nn.fit(features_train, ticker_train)
